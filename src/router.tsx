@@ -7,7 +7,9 @@ import { StatsPage } from './logs/lift/StatsPage'
 import { WeightPage } from './logs/lift/WeightPage'
 import { WorkoutsPage } from './logs/lift/WorkoutsPage'
 import { LogsHubPage } from './pages/LogsHubPage'
+import { InsightsPage } from './pages/InsightsPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { TimelinePage } from './pages/TimelinePage'
 import { TodayPage } from './pages/TodayPage'
 import { AboutPage, NotFoundPage, Planned } from './pages/simple'
 
@@ -44,12 +46,12 @@ export const router = createBrowserRouter(
         {
           path: 'timeline',
           handle: { title: 'Timeline' },
-          element: <Planned title="Timeline" text="Everything you log, day by day." />,
+          element: <TimelinePage />,
         },
         {
           path: 'insights',
           handle: { title: 'Insights' },
-          element: <Planned title="Insights" text="Your week at a glance." />,
+          element: <InsightsPage />,
         },
         { path: 'settings', handle: { title: 'Settings' }, element: <SettingsPage /> },
         {
