@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router'
 
 import { AppShell } from './components/AppShell'
 import { LiftLayout } from './logs/lift/LiftLayout'
+import { WeightPage } from './logs/lift/WeightPage'
 import { LogsHubPage } from './pages/LogsHubPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { AboutPage, NotFoundPage, Planned } from './pages/simple'
@@ -30,7 +31,7 @@ export const router = createBrowserRouter(
           element: <LiftLayout />,
           children: [
             { index: true, element: <Navigate to="weight" replace /> },
-            { path: 'weight', element: <Planned title="Weight" text="Coming next." /> },
+            { path: 'weight', element: <WeightPage /> },
             { path: 'workouts/*', element: <Planned title="Workouts" text="Coming soon." /> },
             { path: 'stats', element: <Planned title="Stats" text="Coming soon." /> },
             { path: 'photos', element: <Planned title="Progress photos" text="Coming soon." /> },
