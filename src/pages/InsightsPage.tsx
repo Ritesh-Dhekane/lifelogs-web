@@ -41,7 +41,7 @@ export function InsightsPage() {
         <p className="flex items-center gap-2 text-body font-semibold" aria-live="polite">
           {fmt(from)} – {fmt(last)}
           {offset === 0 && (
-            <span className="rounded-full bg-accent px-2 py-0.5 text-meta text-white uppercase">
+            <span className="rounded-full bg-accent px-2 py-0.5 text-meta text-on-accent uppercase">
               This week
             </span>
           )}

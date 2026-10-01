@@ -190,7 +190,7 @@ function ConfirmPhoto({
         <button
           type="submit"
           disabled={saving}
-          className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-accent font-semibold text-white disabled:opacity-60"
+          className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-accent font-semibold text-on-accent disabled:opacity-60"
         >
           {saving && <LoaderCircle className="size-4 animate-spin" />} Save photo
         </button>

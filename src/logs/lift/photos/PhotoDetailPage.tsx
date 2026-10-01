@@ -90,7 +90,7 @@ export function PhotoDetailPage() {
                 await deletePhoto(photo.id)
                 navigate('/lift/photos')
               }}
-              className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-white"
+              className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-on-danger"
             >
               Delete
             </button>
@@ -138,7 +138,7 @@ function EditPhoto({ photo, onDone }: { photo: ProgressPhoto; onDone: () => void
         className={field}
         aria-label="Note"
       />
-      <button type="submit" className="h-11 rounded-full bg-accent font-semibold text-white">
+      <button type="submit" className="h-11 rounded-full bg-accent font-semibold text-on-accent">
         Save
       </button>
     </form>

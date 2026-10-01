@@ -31,11 +31,11 @@ export function WorkoutsPage() {
           to="/lift/workouts/session"
           className="flex items-center gap-3 rounded-[18px] bg-lift/10 p-4 ring-1 ring-lift/25"
         >
-          <span className="grid size-10 place-items-center rounded-full bg-lift text-white">
+          <span className="grid size-10 place-items-center rounded-full bg-lift text-black">
             <Play className="size-5" />
           </span>
           <span className="flex-1">
-            <span className="block text-meta uppercase text-lift">In progress</span>
+            <span className="block text-meta uppercase text-lift-ink">In progress</span>
             <span className="text-heading">Resume your workout</span>
           </span>
           <ChevronRight className="size-5 text-ink-3" />
@@ -77,7 +77,7 @@ export function WorkoutsPage() {
       {!active && (
         <Link
           to="/lift/workouts/session"
-          className="fixed inset-x-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-30 mx-auto flex h-13 max-w-md items-center justify-center gap-2 rounded-full bg-accent py-3.5 font-semibold text-white shadow-float active:scale-[0.98] lg:bottom-8 lg:left-[calc(16rem+1rem)]"
+          className="fixed inset-x-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-30 mx-auto flex h-13 max-w-md items-center justify-center gap-2 rounded-full bg-accent py-3.5 font-semibold text-on-accent shadow-float active:scale-[0.98] lg:bottom-8 lg:left-[calc(16rem+1rem)]"
         >
           <Plus className="size-5" /> Start workout
         </Link>

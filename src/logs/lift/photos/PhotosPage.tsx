@@ -50,7 +50,7 @@ export function PhotosPage() {
             <button
               type="button"
               onClick={() => setParams({ add: '1' }, { replace: true })}
-              className="h-11 rounded-full bg-accent px-5 font-semibold text-white"
+              className="h-11 rounded-full bg-accent px-5 font-semibold text-on-accent"
             >
               Add photo
             </button>
@@ -106,7 +106,7 @@ export function PhotosPage() {
         <button
           type="button"
           onClick={() => setParams({ add: '1' }, { replace: true })}
-          className="fixed right-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-30 flex h-12 items-center gap-2 rounded-full bg-accent px-5 font-semibold text-white shadow-float active:scale-95 lg:bottom-8"
+          className="fixed right-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-30 flex h-12 items-center gap-2 rounded-full bg-accent px-5 font-semibold text-on-accent shadow-float active:scale-95 lg:bottom-8"
         >
           <Plus className="size-5" /> Add photo
         </button>
@@ -141,7 +141,7 @@ function Thumb({
             selected ? 'bg-accent' : 'bg-black/30'
           }`}
         >
-          {selected && <Check className="size-3.5 text-white" strokeWidth={3} />}
+          {selected && <Check className="size-3.5 text-on-accent" strokeWidth={3} />}
         </span>
       )}
     </span>

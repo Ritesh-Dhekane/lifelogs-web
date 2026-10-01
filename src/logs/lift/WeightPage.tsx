@@ -72,7 +72,7 @@ export function WeightPage() {
               ) : (
                 <span
                   className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-label font-medium tnum ${
-                    change < 0 ? 'bg-success-soft text-success' : 'bg-lift/12 text-lift'
+                    change < 0 ? 'bg-success-soft text-success' : 'bg-lift/12 text-lift-ink'
                   }`}
                 >
                   {change < 0 ? (
@@ -206,7 +206,7 @@ export function WeightPage() {
             <button
               type="button"
               onClick={openAdd}
-              className="h-11 rounded-full bg-accent px-5 font-semibold text-white"
+              className="h-11 rounded-full bg-accent px-5 font-semibold text-on-accent"
             >
               Log weight
             </button>
@@ -218,7 +218,7 @@ export function WeightPage() {
         <button
           type="button"
           onClick={openAdd}
-          className="fixed right-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-30 flex h-12 items-center gap-2 rounded-full bg-accent px-5 font-semibold text-white shadow-float active:scale-95 lg:bottom-8"
+          className="fixed right-4 bottom-[calc(88px+env(safe-area-inset-bottom))] z-30 flex h-12 items-center gap-2 rounded-full bg-accent px-5 font-semibold text-on-accent shadow-float active:scale-95 lg:bottom-8"
         >
           <Plus className="size-5" /> Add weight
         </button>
@@ -239,7 +239,7 @@ function KindBadge({ entry }: { entry: WeightEntry }) {
     entry.kind === 'before_gym'
       ? 'bg-accent/12 text-accent'
       : entry.kind === 'after_gym'
-        ? 'bg-lift/12 text-lift'
+        ? 'bg-lift/12 text-lift-ink'
         : 'bg-card-2 text-ink-2'
   return (
     <span className={`rounded-md px-2 py-0.5 text-label ${tone}`}>{KIND_LABEL[entry.kind]}</span>

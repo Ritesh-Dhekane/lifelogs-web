@@ -236,7 +236,7 @@ function Session({
             <button
               type="button"
               onClick={discard}
-              className="h-10 flex-1 rounded-full bg-danger font-semibold text-white"
+              className="h-10 flex-1 rounded-full bg-danger font-semibold text-on-danger"
             >
               Discard
             </button>
@@ -504,7 +504,7 @@ function SetRow({
           aria-pressed={set.done}
           aria-label={`Set ${index + 1} done`}
           className={`grid size-10 place-items-center rounded-lg transition-colors ${
-            set.done ? 'bg-success text-white' : 'bg-card-2 text-ink-3'
+            set.done ? 'bg-success text-on-success' : 'bg-card-2 text-ink-3'
           }`}
         >
           <Check className="size-5" strokeWidth={2.5} />
@@ -593,7 +593,7 @@ function Confirm({
         <button
           type="button"
           onClick={onConfirm}
-          className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-white"
+          className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-on-danger"
         >
           {action}
         </button>

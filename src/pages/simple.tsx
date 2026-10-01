@@ -1,8 +1,9 @@
-// Small pages: About, Not found, and placeholders for screens that later tasks fill in.
+// Small pages: About and Not found.
 
-import { Construction, Lock, MapPinOff } from 'lucide-react'
+import { Lock, MapPinOff } from 'lucide-react'
 import { Link } from 'react-router'
 
+import { InstallCard } from '../components/InstallCard'
 import { Card, EmptyState } from '../components/ui'
 
 export function AboutPage() {
@@ -31,6 +32,9 @@ export function AboutPage() {
       >
         Source code on GitHub
       </a>
+      <div className="w-full text-left">
+        <InstallCard />
+      </div>
     </div>
   )
 }
@@ -48,9 +52,4 @@ export function NotFoundPage() {
       }
     />
   )
-}
-
-// Temporary screen for parts that are planned but not built yet.
-export function Planned({ title, text }: { title: string; text: string }) {
-  return <EmptyState icon={Construction} title={title} text={text} />
 }

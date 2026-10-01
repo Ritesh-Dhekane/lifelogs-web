@@ -132,7 +132,7 @@ export function LiftInsights({ from, to, now }: { from: Date; to: Date; now: Dat
           {weightChange !== null && Math.abs(weightChange) >= 0.05 && (
             <span
               className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-label font-medium tnum ${
-                weightChange < 0 ? 'bg-success-soft text-success' : 'bg-lift/12 text-lift'
+                weightChange < 0 ? 'bg-success-soft text-success' : 'bg-lift/12 text-lift-ink'
               }`}
             >
               {weightChange < 0 ? (

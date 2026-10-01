@@ -47,7 +47,7 @@ export function TodayPage() {
           <Link
             to="/backup"
             className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-label ${
-              backup ? 'bg-card-2 text-ink-2' : 'bg-lift/10 text-lift'
+              backup ? 'bg-card-2 text-ink-2' : 'bg-lift/10 text-lift-ink'
             }`}
           >
             {backup ? <CloudUpload className="size-3.5" /> : <CloudOff className="size-3.5" />}

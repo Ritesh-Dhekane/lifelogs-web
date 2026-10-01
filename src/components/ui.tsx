@@ -159,7 +159,7 @@ export function PrimaryButton({
     <button
       type="button"
       {...props}
-      className={`inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-6 font-semibold text-white transition-transform active:scale-[0.98] disabled:opacity-40 ${className}`}
+      className={`inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-6 font-semibold text-on-accent transition-transform active:scale-[0.98] disabled:opacity-40 ${className}`}
     >
       {children}
     </button>

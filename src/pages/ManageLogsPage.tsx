@@ -75,7 +75,7 @@ export function ManageLogsPage() {
       <SectionLabel>Coming soon</SectionLabel>
       <Card className="flex flex-col divide-y divide-line py-1">
         {soon.map((log) => (
-          <div key={log.id} className="flex items-center gap-3 py-3 opacity-70">
+          <div key={log.id} className="flex items-center gap-3 py-3">
             <LogBadge
               icon={log.icon}
               colorClass={log.color.text}

@@ -107,7 +107,7 @@ function ProfileForm({ profile }: { profile: Profile }) {
       )}
       <button
         type="submit"
-        className="flex h-12 items-center justify-center gap-2 rounded-full bg-accent font-semibold text-white active:scale-[0.98]"
+        className="flex h-12 items-center justify-center gap-2 rounded-full bg-accent font-semibold text-on-accent active:scale-[0.98]"
       >
         {saved ? (
           <>

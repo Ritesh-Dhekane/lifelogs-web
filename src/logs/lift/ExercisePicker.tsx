@@ -264,7 +264,7 @@ function CreateExercise({
         </button>
         <button
           type="submit"
-          className="h-12 flex-1 rounded-full bg-accent font-semibold text-white"
+          className="h-12 flex-1 rounded-full bg-accent font-semibold text-on-accent"
         >
           Add exercise
         </button>

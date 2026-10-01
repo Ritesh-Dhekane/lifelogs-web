@@ -189,7 +189,7 @@ function WeightForm({
 
       <button
         type="submit"
-        className="h-12 rounded-full bg-accent font-semibold text-white active:scale-[0.98]"
+        className="h-12 rounded-full bg-accent font-semibold text-on-accent active:scale-[0.98]"
       >
         Save
       </button>
@@ -209,7 +209,7 @@ function WeightForm({
               <button
                 type="button"
                 onClick={remove}
-                className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-white"
+                className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-on-danger"
               >
                 Delete
               </button>

@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
 
-/* "Serene Metric" design tokens from the Stitch export (brain: docs/lifelogs-web/design/).
+/* "Serene Metric" design tokens from the Stitch export (brain: docs/lifelogs-web/design/), with
+   accent and tertiary text adjusted to reach 4.5:1 contrast.
    Light by default; `.dark` on <html> switches to dark, `.oled` to pure-black dark. */
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -13,16 +14,20 @@
   --c-card-2: #f2f2f7;
   --c-ink: #1c1c1e;
   --c-ink-2: #636366;
-  --c-ink-3: #8e8e93;
+  --c-ink-3: #6e6e73;
   --c-line: rgba(60, 60, 67, 0.08);
   --c-hairline: rgba(0, 0, 0, 0.04);
   --c-bar: rgba(245, 245, 247, 0.72);
   --c-primary: #1c1c1e;
   --c-on-primary: #ffffff;
-  --c-accent: #0a84ff;
-  --c-success: #248a3d;
+  --c-accent: #0066cc;
+  --c-on-accent: #ffffff;
+  --c-lift-ink: #c4320e; /* Lift orange, darkened for small text */
+  --c-success: #1e7b34;
   --c-success-soft: rgba(52, 199, 89, 0.14);
   --c-danger: #d70015;
+  --c-on-danger: #ffffff;
+  --c-on-success: #ffffff;
   --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
@@ -33,16 +38,20 @@
   --c-card-2: #2c2c2e;
   --c-ink: #ffffff;
   --c-ink-2: #a1a1a6;
-  --c-ink-3: #8e8e93;
+  --c-ink-3: #98989d;
   --c-line: rgba(255, 255, 255, 0.08);
   --c-hairline: rgba(255, 255, 255, 0.08);
   --c-bar: rgba(28, 28, 30, 0.75);
   --c-primary: #ffffff;
   --c-on-primary: #000000;
-  --c-accent: #0a84ff;
+  --c-accent: #4aa3ff;
+  --c-on-accent: #000000;
+  --c-lift-ink: #ff5a36;
   --c-success: #30d158;
   --c-success-soft: rgba(48, 209, 88, 0.16);
   --c-danger: #ff453a;
+  --c-on-danger: #000000;
+  --c-on-success: #000000;
   --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -68,9 +77,13 @@
   --color-primary: var(--c-primary);
   --color-on-primary: var(--c-on-primary);
   --color-accent: var(--c-accent);
+  --color-on-accent: var(--c-on-accent);
+  --color-lift-ink: var(--c-lift-ink);
   --color-success: var(--c-success);
   --color-success-soft: var(--c-success-soft);
   --color-danger: var(--c-danger);
+  --color-on-danger: var(--c-on-danger);
+  --color-on-success: var(--c-on-success);
   --shadow-float: var(--shadow-float);
 }
 

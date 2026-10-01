@@ -139,7 +139,7 @@ export function BackupPage() {
             <button
               type="button"
               onClick={restore}
-              className="h-10 flex-1 rounded-full bg-lift font-semibold text-white"
+              className="h-10 flex-1 rounded-full bg-lift font-semibold text-black"
             >
               Replace and restore
             </button>
@@ -219,7 +219,7 @@ function FolderSection() {
             <button
               type="button"
               onClick={chooseFolder}
-              className="h-10 rounded-full bg-accent px-4 text-label font-semibold text-white"
+              className="h-10 rounded-full bg-accent px-4 text-label font-semibold text-on-accent"
             >
               Choose folder
             </button>
@@ -228,7 +228,7 @@ function FolderSection() {
             <button
               type="button"
               onClick={allowFolder}
-              className="h-10 rounded-full bg-accent px-4 text-label font-semibold text-white"
+              className="h-10 rounded-full bg-accent px-4 text-label font-semibold text-on-accent"
             >
               Allow saving
             </button>

@@ -40,17 +40,21 @@ const MENU: { to: string; label: string; icon: LucideIcon }[] = [
 
 export interface RouteHandle {
   title?: string
+  ownHeading?: boolean // the page shows its own <h1>, so the bar title is only context
 }
 
 export function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [quickAdd, setQuickAdd] = useState(false)
   const matches = useMatches()
-  const title =
-    [...matches]
-      .reverse()
-      .map((match) => (match.handle as RouteHandle | undefined)?.title)
-      .find(Boolean) ?? 'LifeLogs'
+  const handle = [...matches]
+    .reverse()
+    .map((match) => match.handle as RouteHandle | undefined)
+    .find((h) => h?.title)
+  const title = handle?.title ?? 'LifeLogs'
+  // The bar title is the page's <h1> unless the page has its own. On desktop it sits on the left,
+  // and is left out when the page already shows the same heading.
+  const Title = handle?.ownHeading ? 'span' : 'h1'
 
   return (
     <div className="min-h-svh lg:pl-64">
@@ -62,34 +66,36 @@ export function AppShell() {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-line bg-bar backdrop-blur-xl backdrop-saturate-150 pt-[env(safe-area-inset-top)]">
-        <div className="mx-auto flex h-14 max-w-[1120px] items-center justify-between gap-3 px-2 lg:px-6">
-          <div className="flex items-center gap-1">
+        <div className="mx-auto flex h-14 max-w-[1120px] items-center gap-3 px-2 lg:px-6">
+          <div className="flex items-center gap-1 lg:hidden">
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
-              className="grid size-11 place-items-center rounded-full text-ink active:scale-95 lg:hidden"
+              className="grid size-11 place-items-center rounded-full text-ink active:scale-95"
               aria-label="Open menu"
               aria-expanded={menuOpen}
             >
               <Menu className="size-6" />
             </button>
-            <Link to="/" className="flex items-center gap-2 lg:hidden">
+            <Link to="/" className="flex items-center gap-2">
               <img src={`${BASE}icon.svg`} alt="" className="size-8 rounded-[9px]" />
               <span className="text-heading">LifeLogs</span>
             </Link>
           </div>
-          <div className="flex items-center gap-2 pr-1">
-            <span className="max-w-[140px] truncate text-body font-semibold text-ink-2 lg:max-w-none lg:text-title lg:text-ink">
-              {title}
-            </span>
-            <Link
-              to="/profile"
-              className="grid size-8 place-items-center rounded-full bg-primary text-on-primary"
-              aria-label="Profile"
-            >
-              <User className="size-4" />
-            </Link>
-          </div>
+          <Title
+            className={`ml-auto max-w-[140px] truncate text-body font-semibold text-ink-2 lg:mr-auto lg:ml-0 lg:max-w-none lg:text-title lg:text-ink ${
+              handle?.ownHeading ? 'lg:invisible' : ''
+            }`}
+          >
+            {title}
+          </Title>
+          <Link
+            to="/profile"
+            className="mr-1 grid size-8 shrink-0 place-items-center rounded-full bg-primary text-on-primary"
+            aria-label="Profile"
+          >
+            <User className="size-4" />
+          </Link>
         </div>
       </header>
 
@@ -126,7 +132,7 @@ function BottomNav({ onQuickAdd }: { onQuickAdd: () => void }) {
                 end={tab.end}
                 className={({ isActive }) =>
                   `flex flex-col items-center gap-0.5 py-1 text-meta tracking-normal normal-case transition-colors ${
-                    isActive ? 'text-ink' : 'text-ink-3'
+                    isActive ? 'text-ink' : 'text-ink-2'
                   }`
                 }
               >

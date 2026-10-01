@@ -5,6 +5,7 @@ import { ChevronRight, Lock, Moon, Smartphone, Sun } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router'
 
+import { InstallCard } from '../components/InstallCard'
 import { Card, SectionLabel, Segmented, Toggle } from '../components/ui'
 import { countEntries, resetAllData } from '../data/backup'
 import { storageEstimate } from '../data/db'
@@ -23,6 +24,7 @@ export function SettingsPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-2">
+      <InstallCard />
       <SectionLabel>Appearance</SectionLabel>
       <Card className="flex flex-col gap-4">
         <Segmented<ThemeMode>
@@ -235,7 +237,7 @@ function DataSection() {
               <button
                 type="button"
                 onClick={reset}
-                className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-white"
+                className="h-9 rounded-full bg-danger px-4 text-label font-semibold text-on-danger"
               >
                 Delete all
               </button>

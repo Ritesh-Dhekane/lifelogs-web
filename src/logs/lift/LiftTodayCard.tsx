@@ -64,7 +64,7 @@ export function LiftTodayCard() {
             {change !== null && change !== 0 && (
               <span
                 className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-label font-medium tnum ${
-                  change < 0 ? 'bg-success-soft text-success' : 'bg-lift/12 text-lift'
+                  change < 0 ? 'bg-success-soft text-success' : 'bg-lift/12 text-lift-ink'
                 }`}
               >
                 {change < 0 ? <ArrowDown className="size-3.5" /> : <ArrowUp className="size-3.5" />}
@@ -90,11 +90,11 @@ export function LiftTodayCard() {
           to="/lift/workouts/session"
           className="flex items-center gap-3 rounded-xl bg-lift/10 p-3 ring-1 ring-lift/25"
         >
-          <span className="grid size-9 place-items-center rounded-full bg-lift text-white">
+          <span className="grid size-9 place-items-center rounded-full bg-lift text-black">
             <Play className="size-4" />
           </span>
           <span className="flex-1 text-body font-semibold">Workout in progress</span>
-          <span className="text-label font-medium text-lift">Resume</span>
+          <span className="text-label font-medium text-lift-ink">Resume</span>
         </Link>
       ) : today.length > 0 ? (
         today.map((detail) => {
@@ -127,7 +127,7 @@ export function LiftTodayCard() {
           to="/lift/workouts/session"
           className="flex items-center gap-3 rounded-xl bg-card-2 p-3"
         >
-          <span className="grid size-9 place-items-center rounded-full bg-accent text-white">
+          <span className="grid size-9 place-items-center rounded-full bg-accent text-on-accent">
             <Plus className="size-4" />
           </span>
           <span className="flex-1">
