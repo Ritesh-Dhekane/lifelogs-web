@@ -2,7 +2,9 @@ import { createBrowserRouter, Navigate } from 'react-router'
 
 import { AppShell } from './components/AppShell'
 import { LiftLayout } from './logs/lift/LiftLayout'
+import { SessionPage } from './logs/lift/SessionPage'
 import { WeightPage } from './logs/lift/WeightPage'
+import { WorkoutsPage } from './logs/lift/WorkoutsPage'
 import { LogsHubPage } from './pages/LogsHubPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { AboutPage, NotFoundPage, Planned } from './pages/simple'
@@ -32,7 +34,9 @@ export const router = createBrowserRouter(
           children: [
             { index: true, element: <Navigate to="weight" replace /> },
             { path: 'weight', element: <WeightPage /> },
-            { path: 'workouts/*', element: <Planned title="Workouts" text="Coming soon." /> },
+            { path: 'workouts', element: <WorkoutsPage /> },
+            { path: 'workouts/session', element: <SessionPage /> },
+            { path: 'workouts/:id', element: <SessionPage /> },
             { path: 'stats', element: <Planned title="Stats" text="Coming soon." /> },
             { path: 'photos', element: <Planned title="Progress photos" text="Coming soon." /> },
           ],
