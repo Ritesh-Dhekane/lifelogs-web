@@ -2,6 +2,8 @@ import { createBrowserRouter, Navigate } from 'react-router'
 
 import { AppShell } from './components/AppShell'
 import { LiftLayout } from './logs/lift/LiftLayout'
+import { PhotoComparePage, PhotoDetailPage } from './logs/lift/photos/PhotoDetailPage'
+import { PhotosPage } from './logs/lift/photos/PhotosPage'
 import { SessionPage } from './logs/lift/SessionPage'
 import { StatsPage } from './logs/lift/StatsPage'
 import { WeightPage } from './logs/lift/WeightPage'
@@ -14,7 +16,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TimelinePage } from './pages/TimelinePage'
 import { TodayPage } from './pages/TodayPage'
-import { AboutPage, NotFoundPage, Planned } from './pages/simple'
+import { AboutPage, NotFoundPage } from './pages/simple'
 
 export const router = createBrowserRouter(
   [
@@ -43,7 +45,9 @@ export const router = createBrowserRouter(
             { path: 'workouts/session', element: <SessionPage /> },
             { path: 'workouts/:id', element: <SessionPage /> },
             { path: 'stats', element: <StatsPage /> },
-            { path: 'photos', element: <Planned title="Progress photos" text="Coming soon." /> },
+            { path: 'photos', element: <PhotosPage /> },
+            { path: 'photos/compare', element: <PhotoComparePage /> },
+            { path: 'photos/:id', element: <PhotoDetailPage /> },
           ],
         },
         {

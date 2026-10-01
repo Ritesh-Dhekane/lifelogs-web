@@ -64,6 +64,21 @@ export interface WorkoutSet {
   updatedAt: string
 }
 
+// Progress photo, resized on the device. Image bytes are ArrayBuffers (clone-safe everywhere).
+export interface ProgressPhoto {
+  id: string
+  takenAt: string
+  mime: string
+  width: number
+  height: number
+  data: ArrayBuffer // full image (long side ≤ 1600 px)
+  thumb: ArrayBuffer // ~400 px for grids
+  note: string | null
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+}
+
 export interface Profile {
   id: 'me'
   name: string | null
@@ -80,6 +95,7 @@ export class LifeLogsDB extends Dexie {
   workoutExercises!: EntityTable<WorkoutExercise, 'id'>
   sets!: EntityTable<WorkoutSet, 'id'>
   profile!: EntityTable<Profile, 'id'>
+  photos!: EntityTable<ProgressPhoto, 'id'>
 
   constructor(name = 'lifelogs') {
     super(name)
@@ -92,6 +108,7 @@ export class LifeLogsDB extends Dexie {
       sets: 'id, workoutId, workoutExerciseId',
       profile: 'id',
     })
+    this.version(2).stores({ photos: 'id, takenAt' })
     this.on('populate', (tx) => {
       const now = new Date().toISOString()
       tx.table('exercises').bulkAdd(

@@ -1,6 +1,7 @@
-// Lift's entries for the shared timeline: weigh-ins and finished workouts.
+// Lift's entries for the shared timeline: weigh-ins, finished workouts and progress photos.
 
 import { MUSCLE_LABEL } from '../../data/exercises'
+import { listPhotos } from '../../data/photos'
 import { listWeights } from '../../data/repos'
 import { listWorkouts } from '../../data/workouts'
 import { getPrefs } from '../../lib/prefs'
@@ -11,7 +12,11 @@ import { formatMinutes, musclesWorked, summarize } from './workoutStats'
 
 export async function liftTimeline(): Promise<TimelineItem[]> {
   const unit = getPrefs().units.weight
-  const [weights, workouts] = await Promise.all([listWeights(), listWorkouts()])
+  const [weights, workouts, photos] = await Promise.all([
+    listWeights(),
+    listWorkouts(),
+    listPhotos(),
+  ])
 
   const weighIns: TimelineItem[] = weights.map((entry) => ({
     id: `weight-${entry.id}`,
@@ -43,5 +48,15 @@ export async function liftTimeline(): Promise<TimelineItem[]> {
     }
   })
 
-  return [...weighIns, ...sessions]
+  const pictures: TimelineItem[] = photos.map((photo) => ({
+    id: `photo-${photo.id}`,
+    log: 'lift',
+    at: photo.takenAt,
+    title: 'Progress photo',
+    quote: photo.note || undefined,
+    to: `/lift/photos/${photo.id}`,
+    searchText: ['photo', 'progress', photo.note ?? ''].join(' ').toLowerCase(),
+  }))
+
+  return [...weighIns, ...sessions, ...pictures]
 }

@@ -5,9 +5,18 @@ import { getPrefs, normalizePrefs, setPrefs, type Prefs } from '../lib/prefs'
 import { db } from './db'
 
 export const BACKUP_APP = 'lifelogs'
-export const BACKUP_VERSION = 1
+// v1: Lift tables. v2: + progress photos (image bytes as base64).
+export const BACKUP_VERSION = 2
 
-const TABLES = ['weights', 'exercises', 'workouts', 'workoutExercises', 'sets', 'profile'] as const
+const TABLES = [
+  'weights',
+  'exercises',
+  'workouts',
+  'workoutExercises',
+  'sets',
+  'profile',
+  'photos',
+] as const
 type TableName = (typeof TABLES)[number]
 
 export interface Backup {
@@ -27,6 +36,7 @@ export async function createBackup(): Promise<Backup> {
     TABLES.map((name) => db.table(name)),
     async () => {
       for (const name of TABLES) tables[name] = await db.table(name).toArray()
+      tables.photos = (tables.photos as Record<string, unknown>[]).map(encodePhoto)
     },
   )
   return {
@@ -78,7 +88,10 @@ export async function restoreBackup(backup: Backup): Promise<void> {
     async () => {
       for (const name of TABLES) {
         await db.table(name).clear()
-        const rows = backup.tables[name] ?? []
+        const rows =
+          name === 'photos'
+            ? (backup.tables.photos ?? []).map((row) => decodePhoto(row as Record<string, unknown>))
+            : (backup.tables[name] ?? [])
         if (rows.length) await db.table(name).bulkPut(rows)
       }
     },
@@ -107,4 +120,38 @@ export async function resetAllData(): Promise<void> {
   } catch {
     // ignore
   }
+}
+
+// ---------- Image bytes <-> base64 ----------
+
+function encodePhoto(row: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...row,
+    data: toBase64(row.data as ArrayBuffer),
+    thumb: toBase64(row.thumb as ArrayBuffer),
+  }
+}
+
+function decodePhoto(row: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...row,
+    data: fromBase64(String(row.data ?? '')),
+    thumb: fromBase64(String(row.thumb ?? '')),
+  }
+}
+
+export function toBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer)
+  let binary = ''
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+  }
+  return btoa(binary)
+}
+
+export function fromBase64(text: string): ArrayBuffer {
+  const binary = atob(text)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+  return bytes.buffer
 }

@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { getPrefs, setPrefs } from '../lib/prefs'
 import { BackupError, createBackup, parseBackup, restoreBackup } from './backup'
 import { db } from './db'
+import { addPhoto, deletePhoto, listPhotos } from './photos'
 import { addWeight, createExercise, saveProfile } from './repos'
 import { addExercise, finishWorkout, startWorkout, updateSet } from './workouts'
 
@@ -42,6 +43,13 @@ async function seed() {
     await updateSet(set.id, { reps: 8, weightKg: 30, done: true })
   await finishWorkout(workout.id)
   await saveProfile({ heightCm: 178, targetWeightKg: 72 })
+  const bytes = (n: number) => new Uint8Array(Array.from({ length: n }, (_, i) => i % 256)).buffer
+  await addPhoto({
+    takenAt: '2026-09-30T07:30:00Z',
+    note: 'Front',
+    image: { data: bytes(5000), mime: 'image/jpeg', width: 1200, height: 1600 },
+    thumb: { data: bytes(300), mime: 'image/jpeg', width: 300, height: 400 },
+  })
 }
 
 describe('backup', () => {
@@ -59,7 +67,30 @@ describe('backup', () => {
     await restoreBackup(parseBackup(text))
     const again = await createBackup()
     expect(again.tables).toEqual(backup.tables)
+    const [photo] = await listPhotos()
+    expect(new Uint8Array(photo!.data)[4999]).toBe(4999 % 256)
+    expect(photo!.thumb.byteLength).toBe(300)
     expect(getPrefs().units.weight).toBe('lb')
+  })
+
+  it('still restores version 1 backups (before photos)', async () => {
+    const v1 = JSON.stringify({
+      app: 'lifelogs',
+      version: 1,
+      exportedAt: '',
+      prefs: {},
+      tables: { weights: [] },
+    })
+    await restoreBackup(parseBackup(v1))
+    expect(await listPhotos()).toEqual([])
+  })
+
+  it('drops image bytes when a photo is deleted', async () => {
+    await seed()
+    const [photo] = await listPhotos()
+    await deletePhoto(photo!.id)
+    expect(await listPhotos()).toEqual([])
+    expect((await db.photos.get(photo!.id))?.data.byteLength).toBe(0)
   })
 
   it('rejects files that are not LifeLogs backups', () => {
