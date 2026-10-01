@@ -37,3 +37,10 @@ export function formatTonnage(kg: number, unit: WeightUnit): string {
     ? `${(value / 1000).toFixed(1)}${unit === 'kg' ? 't' : 'k lb'}`
     : formatMass(kg, unit)
 }
+
+// Short label for chart bars: "7.0t" / "850 kg" (or "7.0k" / "850 lb").
+export function formatShortMass(kg: number, unit: WeightUnit): string {
+  const value = fromKg(kg, unit)
+  if (value < 1000) return `${Math.round(value)} ${unit}`
+  return `${(value / 1000).toFixed(1)}${unit === 'kg' ? 't' : 'k'}`
+}

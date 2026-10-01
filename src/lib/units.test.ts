@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatMass, formatTonnage, formatWeight, fromKg, toKg } from './units'
+import { formatMass, formatShortMass, formatTonnage, formatWeight, fromKg, toKg } from './units'
 
 describe('units', () => {
   it('round-trips kg and lb', () => {
@@ -17,5 +17,7 @@ describe('units', () => {
     expect(formatMass(4820.4, 'kg')).toBe('4,820 kg')
     expect(formatTonnage(68420, 'kg')).toBe('68.4t')
     expect(formatTonnage(4820, 'kg')).toBe('4,820 kg')
+    expect(formatShortMass(7016, 'kg')).toBe('7.0t')
+    expect(formatShortMass(850, 'kg')).toBe('850 kg')
   })
 })

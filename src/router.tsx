@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router'
 import { AppShell } from './components/AppShell'
 import { LiftLayout } from './logs/lift/LiftLayout'
 import { SessionPage } from './logs/lift/SessionPage'
+import { StatsPage } from './logs/lift/StatsPage'
 import { WeightPage } from './logs/lift/WeightPage'
 import { WorkoutsPage } from './logs/lift/WorkoutsPage'
 import { LogsHubPage } from './pages/LogsHubPage'
@@ -37,7 +38,7 @@ export const router = createBrowserRouter(
             { path: 'workouts', element: <WorkoutsPage /> },
             { path: 'workouts/session', element: <SessionPage /> },
             { path: 'workouts/:id', element: <SessionPage /> },
-            { path: 'stats', element: <Planned title="Stats" text="Coming soon." /> },
+            { path: 'stats', element: <StatsPage /> },
             { path: 'photos', element: <Planned title="Progress photos" text="Coming soon." /> },
           ],
         },
