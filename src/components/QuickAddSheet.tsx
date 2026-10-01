@@ -1,7 +1,10 @@
 // The "+" button: every enabled log's quickest actions in one sheet.
 
 import { ChevronRight } from 'lucide-react'
+import { useLiveQuery } from 'dexie-react-hooks'
 import { useNavigate } from 'react-router'
+
+import { getActiveWorkout } from '../data/workouts'
 
 import { quickActions } from '../logs/actions'
 import { enabledLogs } from '../logs/registry'
@@ -13,6 +16,7 @@ export function QuickAddSheet({ open, onClose }: { open: boolean; onClose: () =>
   const prefs = usePrefs()
   const navigate = useNavigate()
   const logs = enabledLogs(prefs)
+  const active = useLiveQuery(getActiveWorkout)
 
   return (
     <Sheet open={open} onClose={onClose} title="Quick add">
@@ -32,7 +36,7 @@ export function QuickAddSheet({ open, onClose }: { open: boolean; onClose: () =>
               {log.name}
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              {quickActions(log.id).map((action) => (
+              {quickActions(log.id, { workoutInProgress: Boolean(active) }).map((action) => (
                 <button
                   key={action.label}
                   type="button"

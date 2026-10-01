@@ -8,6 +8,7 @@ import { WeightPage } from './logs/lift/WeightPage'
 import { WorkoutsPage } from './logs/lift/WorkoutsPage'
 import { LogsHubPage } from './pages/LogsHubPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { TodayPage } from './pages/TodayPage'
 import { AboutPage, NotFoundPage, Planned } from './pages/simple'
 
 export const router = createBrowserRouter(
@@ -18,9 +19,7 @@ export const router = createBrowserRouter(
         {
           index: true,
           handle: { title: 'Today' },
-          element: (
-            <Planned title="Today" text="Your daily summary arrives with the Lift screens." />
-          ),
+          element: <TodayPage />,
         },
         { path: 'logs', handle: { title: 'Logs' }, element: <LogsHubPage /> },
         {
