@@ -1,7 +1,8 @@
-// Backup & restore: export everything to a file, or restore from one. Google Drive comes next.
+// Backup & restore: export everything to a file, or restore from one; keep a copy in a folder on
+// desktop. Google Drive comes next.
 
 import { useLiveQuery } from 'dexie-react-hooks'
-import { CloudUpload, Download, FileUp, HardDrive, ShieldCheck } from 'lucide-react'
+import { CloudUpload, Download, FileUp, FolderSync, HardDrive, ShieldCheck } from 'lucide-react'
 import { useRef, useState, type ChangeEvent } from 'react'
 
 import { Card, SectionLabel } from '../components/ui'
@@ -15,6 +16,14 @@ import {
   type Backup,
 } from '../data/backup'
 import { describeBackup, recordBackup, useBackupStatus } from '../lib/backupStatus'
+import {
+  allowFolder,
+  chooseFolder,
+  folderBackupSupported,
+  forgetFolder,
+  useFolderBackup,
+  writeNow,
+} from '../lib/folderBackup'
 
 export function BackupPage() {
   const status = useBackupStatus()
@@ -100,14 +109,14 @@ export function BackupPage() {
             <span className="text-label text-ink-2">Replaces what's on this device</span>
           </span>
         </button>
-        <input
-          ref={fileInput}
-          type="file"
-          accept="application/json,.json"
-          hidden
-          onChange={pickFile}
-        />
       </Card>
+      <input
+        ref={fileInput}
+        type="file"
+        accept="application/json,.json"
+        hidden
+        onChange={pickFile}
+      />
 
       {pending && (
         <Card className="flex flex-col gap-3 border-lift/30 bg-lift/8">
@@ -147,6 +156,8 @@ export function BackupPage() {
         </p>
       )}
 
+      {folderBackupSupported && <FolderSection />}
+
       <SectionLabel>Google Drive</SectionLabel>
       <Card className="flex items-start gap-3 bg-card-2/60">
         <CloudUpload className="mt-0.5 size-5 shrink-0 text-ink-2" />
@@ -163,5 +174,94 @@ export function BackupPage() {
         <ShieldCheck className="size-4" /> Backups contain only your data. Nothing is sent to us.
       </p>
     </div>
+  )
+}
+
+function FolderSection() {
+  const folder = useFolderBackup()
+  const last = folder.lastWrite ? describeBackup({ at: folder.lastWrite, where: 'folder' }) : null
+  return (
+    <>
+      <SectionLabel>Folder on this computer</SectionLabel>
+      <Card className="flex flex-col gap-3">
+        <div className="flex items-start gap-3">
+          <FolderSync className="mt-0.5 size-5 shrink-0 text-accent" />
+          <div className="flex-1">
+            {folder.folder ? (
+              <>
+                <p className="text-body font-medium">
+                  Saving to <span className="font-semibold">{folder.folder}</span>
+                </p>
+                <p className="text-label text-ink-2">
+                  {folder.permission === 'granted'
+                    ? `${last ?? 'Not saved yet'}. Updated a few seconds after every change; the last 7 days are kept.`
+                    : 'The browser needs your OK again before saving to this folder.'}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-body font-medium">Keep a copy in a folder</p>
+                <p className="text-label text-ink-2">
+                  Pick a folder (one that syncs, like Google Drive or OneDrive, works well). A
+                  backup is saved there after every change, one file per day, last 7 days kept.
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+        {folder.error && (
+          <p role="alert" className="rounded-xl bg-danger/10 px-3 py-2 text-label text-danger">
+            {folder.error}
+          </p>
+        )}
+        <div className="flex flex-wrap gap-2">
+          {!folder.folder && (
+            <button
+              type="button"
+              onClick={chooseFolder}
+              className="h-10 rounded-full bg-accent px-4 text-label font-semibold text-white"
+            >
+              Choose folder
+            </button>
+          )}
+          {folder.folder && folder.permission !== 'granted' && (
+            <button
+              type="button"
+              onClick={allowFolder}
+              className="h-10 rounded-full bg-accent px-4 text-label font-semibold text-white"
+            >
+              Allow saving
+            </button>
+          )}
+          {folder.folder && folder.permission === 'granted' && (
+            <button
+              type="button"
+              onClick={writeNow}
+              className="h-10 rounded-full bg-card-2 px-4 text-label font-medium"
+            >
+              Save now
+            </button>
+          )}
+          {folder.folder && (
+            <>
+              <button
+                type="button"
+                onClick={chooseFolder}
+                className="h-10 rounded-full bg-card-2 px-4 text-label font-medium"
+              >
+                Change folder
+              </button>
+              <button
+                type="button"
+                onClick={forgetFolder}
+                className="h-10 rounded-full px-4 text-label font-medium text-ink-2"
+              >
+                Stop
+              </button>
+            </>
+          )}
+        </div>
+      </Card>
+    </>
   )
 }

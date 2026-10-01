@@ -1,4 +1,4 @@
-// When data was last backed up (file export or Google Drive), for the status chips.
+// When data was last backed up (file export, folder copy or Google Drive), for the status chips.
 
 import { useSyncExternalStore } from 'react'
 
@@ -7,7 +7,7 @@ const listeners = new Set<() => void>()
 
 export interface BackupStatus {
   at: string // ISO time
-  where: 'file' | 'drive'
+  where: 'file' | 'folder' | 'drive'
 }
 
 function read(): BackupStatus | null {
