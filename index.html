@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>LifeLogs</title>
+    <meta
+      name="description"
+      content="A calm, private tracker for your lifts and daily life. Your data stays on your device."
+    />
+    <meta name="theme-color" content="#f5f5f7" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script>
+      // Apply the saved theme before first paint (no flash). Settings own this preference.
+      ;(function () {
+        try {
+          var saved = JSON.parse(localStorage.getItem('lifelogs-theme') || '{}')
+          var mode = saved.mode || 'system'
+          var dark =
+            mode === 'dark' ||
+            (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark) document.documentElement.classList.add('dark')
+          if (dark && saved.oled) document.documentElement.classList.add('oled')
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
