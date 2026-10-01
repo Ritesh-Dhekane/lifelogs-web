@@ -99,10 +99,10 @@
   --text-title--line-height: 28px;
   --text-title--letter-spacing: -0.015em;
   --text-title--font-weight: 600;
-  --text-card: 17px;
-  --text-card--line-height: 22px;
-  --text-card--letter-spacing: -0.01em;
-  --text-card--font-weight: 600;
+  --text-heading: 17px;
+  --text-heading--line-height: 22px;
+  --text-heading--letter-spacing: -0.01em;
+  --text-heading--font-weight: 600;
   --text-body: 15px;
   --text-body--line-height: 20px;
   --text-body--letter-spacing: -0.005em;
@@ -136,6 +136,34 @@
   :focus-visible {
     outline: 2px solid var(--c-accent);
     outline-offset: 2px;
+  }
+}
+
+/* Sheets slide up, the drawer slides in from the left. */
+dialog.sheet[open] {
+  animation: sheet-in 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+dialog.drawer[open] {
+  animation: drawer-in 0.26s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+dialog.sheet::backdrop,
+dialog.drawer::backdrop {
+  animation: fade-in 0.25s ease-out;
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }
 

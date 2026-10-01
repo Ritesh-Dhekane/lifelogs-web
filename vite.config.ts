@@ -3,11 +3,14 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
 
+import pkg from './package.json' with { type: 'json' }
+
 // Served from GitHub Pages at /lifelogs-web/.
 const BASE = '/lifelogs-web/'
 
 export default defineConfig({
   base: BASE,
+  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   plugins: [
     react(),
     tailwindcss(),

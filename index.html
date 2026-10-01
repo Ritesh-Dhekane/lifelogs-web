@@ -15,13 +15,14 @@
       // Apply the saved theme before first paint (no flash). Settings own this preference.
       ;(function () {
         try {
-          var saved = JSON.parse(localStorage.getItem('lifelogs-theme') || '{}')
-          var mode = saved.mode || 'system'
+          var prefs = JSON.parse(localStorage.getItem('lifelogs-prefs') || '{}')
+          var theme = prefs.theme || {}
+          var mode = theme.mode || 'system'
           var dark =
             mode === 'dark' ||
             (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
           if (dark) document.documentElement.classList.add('dark')
-          if (dark && saved.oled) document.documentElement.classList.add('oled')
+          if (dark && theme.oled) document.documentElement.classList.add('oled')
         } catch (e) {}
       })()
     </script>
