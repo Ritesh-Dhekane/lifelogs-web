@@ -7,7 +7,10 @@ import { StatsPage } from './logs/lift/StatsPage'
 import { WeightPage } from './logs/lift/WeightPage'
 import { WorkoutsPage } from './logs/lift/WorkoutsPage'
 import { LogsHubPage } from './pages/LogsHubPage'
+import { BackupPage } from './pages/BackupPage'
 import { InsightsPage } from './pages/InsightsPage'
+import { ManageLogsPage } from './pages/ManageLogsPage'
+import { ProfilePage } from './pages/ProfilePage'
 import { SettingsPage } from './pages/SettingsPage'
 import { TimelinePage } from './pages/TimelinePage'
 import { TodayPage } from './pages/TodayPage'
@@ -27,7 +30,7 @@ export const router = createBrowserRouter(
         {
           path: 'logs/manage',
           handle: { title: 'Manage logs' },
-          element: <Planned title="Manage logs" text="Reorder your logs here soon." />,
+          element: <ManageLogsPage />,
         },
         {
           path: 'lift',
@@ -57,14 +60,12 @@ export const router = createBrowserRouter(
         {
           path: 'profile',
           handle: { title: 'Profile' },
-          element: <Planned title="Profile" text="Height, goal and target weight." />,
+          element: <ProfilePage />,
         },
         {
           path: 'backup',
           handle: { title: 'Backup & restore' },
-          element: (
-            <Planned title="Backup & restore" text="Export to a file or back up to Google Drive." />
-          ),
+          element: <BackupPage />,
         },
         { path: 'about', handle: { title: 'About' }, element: <AboutPage /> },
         { path: '*', handle: { title: 'Not found' }, element: <NotFoundPage /> },

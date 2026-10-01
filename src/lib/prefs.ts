@@ -92,11 +92,12 @@ export function isDark(prefs: Prefs): boolean {
 }
 
 export function applyTheme(prefs: Prefs) {
+  if (typeof document === 'undefined') return
   const root = document.documentElement
   const dark = isDark(prefs)
   root.classList.toggle('dark', dark)
   root.classList.toggle('oled', dark && prefs.theme.oled)
-  const color = dark ? (prefs.theme.oled ? '#000000' : '#000000') : '#f5f5f7'
+  const color = dark ? '#000000' : '#f5f5f7'
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color)
 }
 
