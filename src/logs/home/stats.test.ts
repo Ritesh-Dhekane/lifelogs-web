@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { CareTask, Thing, Vehicle, VehicleLog } from '../../data/db'
-import { careNextDue, dueItems, mileage, serviceStatus } from './stats'
+import { careNextDue, dueItems, dueText, mileage, serviceStatus } from './stats'
 
 const fuel = (
   at: string,
@@ -154,5 +154,34 @@ describe('due list', () => {
       ['TV', 'warranty', false],
       ['Passport', 'document', false],
     ])
+  })
+})
+
+describe('due words', () => {
+  const item = (patch: Partial<Parameters<typeof dueText>[0]>) => ({
+    id: 'x',
+    source: 'document' as const,
+    title: 'x',
+    detail: '',
+    day: '2026-10-22',
+    overdue: false,
+    to: '/',
+    ...patch,
+  })
+  it('reads naturally', () => {
+    const today = '2026-10-02'
+    expect(dueText(item({}), today)).toBe('Expires on Oct 22')
+    expect(dueText(item({ day: '2026-10-07' }), today)).toBe('Expires in 5 days')
+    expect(dueText(item({ day: '2026-09-29', overdue: true }), today)).toBe('Expired 3 days ago')
+    expect(dueText(item({ source: 'warranty', day: '2026-10-03' }), today)).toBe(
+      'Warranty ends tomorrow',
+    )
+    expect(dueText(item({ source: 'care', day: '2026-09-30', overdue: true }), today)).toBe(
+      'Overdue by 2 days',
+    )
+    expect(dueText(item({ source: 'care', day: today }), today)).toBe('Due today')
+    expect(dueText(item({ source: 'service', detail: 'Due in 350 km' }), today)).toBe(
+      'Due in 350 km',
+    )
   })
 })

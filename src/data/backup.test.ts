@@ -4,8 +4,11 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { getPrefs, setPrefs } from '../lib/prefs'
 import { BackupError, createBackup, parseBackup, restoreBackup } from './backup'
+import { addCareTask, markCareDone } from './care'
 import { db } from './db'
 import { addCategory, addExpense, listExpenses } from './expenses'
+import { addThing, listThings, setThingPhoto } from './things'
+import { addVehicle, addVehicleLog } from './vehicles'
 import { addPhoto, deletePhoto, listPhotos } from './photos'
 import { addWeight, createExercise, saveProfile } from './repos'
 import { addExercise, finishWorkout, startWorkout, updateSet } from './workouts'
@@ -53,6 +56,33 @@ async function seed() {
   })
   await addExpense({ spentAt: '2026-09-30T13:00:00Z', amountMinor: 45050, categoryId: 'cat-food' })
   await addCategory({ name: 'Pets', icon: 'pet', color: '#a2845e' })
+  const tv = await addThing({
+    kind: 'item',
+    name: 'TV',
+    category: 'electronics',
+    expiresOn: '2027-01-01',
+  })
+  await setThingPhoto(tv.id, {
+    image: { data: bytes(800), mime: 'image/jpeg', width: 40, height: 20 },
+    thumb: { data: bytes(80), mime: 'image/jpeg', width: 4, height: 2 },
+  })
+  const car = await addVehicle({ name: 'Swift', type: 'car', serviceEveryKm: 10000 })
+  await addVehicleLog({
+    vehicleId: car.id,
+    kind: 'fuel',
+    at: '2026-09-30T10:00:00Z',
+    odometerKm: 1000,
+    litres: 30,
+    costMinor: 300000,
+    addToExpenses: true,
+  })
+  const plant = await addCareTask({
+    name: 'Water',
+    group: 'plant',
+    everyDays: 3,
+    startOn: '2026-09-30',
+  })
+  await markCareDone(plant.id, '2026-09-30T08:00:00Z')
 }
 
 describe('backup', () => {
@@ -74,7 +104,12 @@ describe('backup', () => {
     expect(new Uint8Array(photo!.data)[4999]).toBe(4999 % 256)
     expect(photo!.thumb.byteLength).toBe(300)
     expect(getPrefs().units.weight).toBe('lb')
-    expect((await listExpenses())[0]!.amountMinor).toBe(45050)
+    expect((await listExpenses()).map((e) => e.amountMinor).sort()).toEqual([300000, 45050].sort())
+    const [tv] = await listThings()
+    const receipt = await db.attachments.get(tv!.photoId!)
+    expect(new Uint8Array(receipt!.data)[799]).toBe(799 % 256)
+    expect(await db.careLogs.count()).toBe(1)
+    expect(await db.vehicleLogs.count()).toBe(1)
   })
 
   it('keeps the built-in categories when restoring a backup from before Expenses', async () => {

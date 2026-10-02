@@ -12,6 +12,7 @@ import { greeting } from '../lib/dates'
 import { usePrefs } from '../lib/prefs'
 import { loggingStreak } from '../lib/streak'
 import { ExpensesTodayCard } from '../logs/expenses/ExpensesTodayCard'
+import { HomeTodayCard } from '../logs/home/HomeTodayCard'
 import { LiftTodayCard } from '../logs/lift/LiftTodayCard'
 import { enabledLogs, type LogId } from '../logs/registry'
 
@@ -19,18 +20,23 @@ import { enabledLogs, type LogId } from '../logs/registry'
 const TODAY_CARDS: Partial<Record<LogId, ComponentType>> = {
   lift: LiftTodayCard,
   expenses: ExpensesTodayCard,
+  home: HomeTodayCard,
 }
 
 async function loggedTimestamps(): Promise<string[]> {
-  const [weights, workouts, expenses] = await Promise.all([
+  const [weights, workouts, expenses, careLogs, vehicleLogs] = await Promise.all([
     db.weights.toArray(),
     db.workouts.toArray(),
     db.expenses.toArray(),
+    db.careLogs.toArray(),
+    db.vehicleLogs.toArray(),
   ])
   return [
     ...weights.filter((w) => !w.deletedAt).map((w) => w.recordedAt),
     ...workouts.filter((w) => !w.deletedAt && w.endedAt).map((w) => w.startedAt),
     ...expenses.filter((e) => !e.deletedAt && !e.recurringId).map((e) => e.spentAt),
+    ...careLogs.map((l) => l.doneAt),
+    ...vehicleLogs.filter((l) => !l.deletedAt).map((l) => l.at),
   ]
 }
 

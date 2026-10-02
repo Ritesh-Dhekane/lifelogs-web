@@ -23,6 +23,7 @@ const EXPENSE_TABS = [
 ] as const
 
 const HOME_TABS = [
+  { value: 'due', label: 'Due' },
   { value: 'things', label: 'Things' },
   { value: 'vehicles', label: 'Vehicles' },
   { value: 'care', label: 'Care' },
@@ -134,7 +135,14 @@ export const router = createBrowserRouter(
               handle: { title: 'Home', ownHeading: true },
               element: <LogLayout log="home" tabs={HOME_TABS} />,
               children: [
-                { index: true, element: <Navigate to="things" replace /> },
+                { index: true, element: <Navigate to="due" replace /> },
+                {
+                  path: 'due',
+                  lazy: page(
+                    () => import('./logs/home/DuePage'),
+                    (m) => m.DuePage,
+                  ),
+                },
                 {
                   path: 'things',
                   lazy: page(

@@ -237,3 +237,29 @@ export function expiryText(thing: Thing, today: string): { text: string; urgent:
   if (left < 0) return { text: 'Warranty over', urgent: false }
   return { text: `Warranty until ${when}`, urgent: left <= thing.remindDays }
 }
+
+// ---------- Words ----------
+
+// "today", "tomorrow", "in 5 days", "3 days ago", "on Mar 12".
+function when(day: string, today: string): string {
+  const rel = relativeDay(day, today)
+  if (/^(Today|Tomorrow|Yesterday)$/.test(rel)) return rel.toLowerCase()
+  if (rel.startsWith('In ') || rel.endsWith(' ago')) return rel.toLowerCase()
+  return `on ${rel}`
+}
+
+// The second line of a due row: "Expires in 20 days", "Expired 3 days ago", "Overdue by 2 days".
+export function dueText(item: DueItem, today: string): string {
+  const late = daysBetween(item.day, today)
+  switch (item.source) {
+    case 'document':
+      return item.overdue ? `Expired ${when(item.day, today)}` : `Expires ${when(item.day, today)}`
+    case 'warranty':
+      return `Warranty ends ${when(item.day, today)}`
+    case 'service':
+      return item.detail === 'Due' ? `Due ${when(item.day, today)}` : item.detail
+    case 'care':
+      if (item.overdue) return `Overdue by ${late} ${late === 1 ? 'day' : 'days'}`
+      return item.day === today ? 'Due today' : `Due ${when(item.day, today)}`
+  }
+}

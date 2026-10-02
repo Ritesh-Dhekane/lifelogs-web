@@ -5,6 +5,7 @@ import { useState, type ComponentType } from 'react'
 
 import { usePrefs } from '../lib/prefs'
 import { ExpensesInsights } from '../logs/expenses/ExpensesInsights'
+import { HomeInsights } from '../logs/home/HomeInsights'
 import { LiftInsights } from '../logs/lift/LiftInsights'
 import { weekStart } from '../logs/lift/liftStats'
 import { enabledLogs, type LogId } from '../logs/registry'
@@ -13,6 +14,7 @@ import { enabledLogs, type LogId } from '../logs/registry'
 const SECTIONS: Partial<Record<LogId, ComponentType<{ from: Date; to: Date; now: Date }>>> = {
   lift: LiftInsights,
   expenses: ExpensesInsights,
+  home: HomeInsights,
 }
 
 export function InsightsPage() {

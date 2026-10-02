@@ -117,15 +117,22 @@ export function backupFileName(date = new Date()): string {
 }
 
 export async function countEntries(): Promise<number> {
-  const [weights, workouts, expenses] = await Promise.all([
+  const [weights, workouts, expenses, things, vehicleLogs, careLogs] = await Promise.all([
     db.weights.toArray(),
     db.workouts.toArray(),
     db.expenses.toArray(),
+    db.things.toArray(),
+    db.vehicleLogs.toArray(),
+    db.careLogs.count(),
   ])
+  const live = (rows: { deletedAt: string | null }[]) => rows.filter((r) => !r.deletedAt).length
   return (
-    weights.filter((w) => !w.deletedAt).length +
+    live(weights) +
     workouts.filter((w) => !w.deletedAt && w.endedAt).length +
-    expenses.filter((e) => !e.deletedAt).length
+    live(expenses) +
+    live(things) +
+    live(vehicleLogs) +
+    careLogs
   )
 }
 

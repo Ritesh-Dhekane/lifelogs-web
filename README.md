@@ -1,8 +1,14 @@
 # LifeLogs
 
-A calm, private tracker for your day — starting with **Lift**: body weight, gym workouts, strength
-stats and progress photos. More logs (water, meals, expenses, distance, screen time, thoughts,
-tasks) will be added one at a time.
+A calm, private tracker for your day. Three logs so far:
+
+- **Lift** — body weight, gym workouts, strength stats and progress photos.
+- **Expenses** — spending by category, monthly budgets, and bills and subscriptions that add
+  themselves on their due dates.
+- **Home** — things under warranty, documents that expire, vehicles (fuel, mileage, service) and
+  repeat care for plants, pets and the home, with one list of what's due.
+
+More logs (water, meals, distance, thoughts, tasks) will be added one at a time.
 
 Live: https://ritesh-dhekane.github.io/lifelogs-web/ — install it from Settings, or the browser
 menu ("Install app" / "Add to Home screen"). It works offline.
