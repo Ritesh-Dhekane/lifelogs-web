@@ -10,6 +10,7 @@ import { Card, SectionLabel, Segmented, Toggle } from '../components/ui'
 import { countEntries, resetAllData } from '../data/backup'
 import { storageEstimate } from '../data/db'
 import { describeBackup, useBackupStatus } from '../lib/backupStatus'
+import { CURRENCIES, type CurrencyCode } from '../lib/currencies'
 import {
   isDark,
   setPrefs,
@@ -89,6 +90,26 @@ export function SettingsPage() {
                 ]}
               />
             </div>
+          }
+        />
+        <Row
+          title="Currency"
+          text="For Expenses. Amounts aren't converted."
+          control={
+            <select
+              aria-label="Currency"
+              value={prefs.currency}
+              onChange={(event) =>
+                setPrefs((p) => ({ ...p, currency: event.target.value as CurrencyCode }))
+              }
+              className="h-9 max-w-44 rounded-full bg-card-2 px-3 text-label outline-none focus:ring-2 focus:ring-accent"
+            >
+              {CURRENCIES.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
           }
         />
         <Row

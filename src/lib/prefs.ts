@@ -3,6 +3,8 @@
 
 import { useSyncExternalStore } from 'react'
 
+import { isCurrency, type CurrencyCode } from './currencies'
+
 export type ThemeMode = 'light' | 'dark' | 'system'
 export type WeightUnit = 'kg' | 'lb'
 export type WeekStart = 'monday' | 'sunday'
@@ -10,6 +12,7 @@ export type WeekStart = 'monday' | 'sunday'
 export interface Prefs {
   theme: { mode: ThemeMode; oled: boolean }
   units: { weight: WeightUnit }
+  currency: CurrencyCode
   weekStart: WeekStart
   restSeconds: number
   logs: { order: string[]; enabled: Record<string, boolean> }
@@ -20,9 +23,10 @@ export const PREFS_KEY = 'lifelogs-prefs'
 export const DEFAULT_PREFS: Prefs = {
   theme: { mode: 'system', oled: false },
   units: { weight: 'kg' },
+  currency: 'INR',
   weekStart: 'monday',
   restSeconds: 90,
-  logs: { order: [], enabled: { lift: true } },
+  logs: { order: [], enabled: { lift: true, expenses: true, home: true } },
 }
 
 // Fill in anything missing (older saves, hand-edited storage) from the defaults.
@@ -31,6 +35,7 @@ export function normalizePrefs(value: unknown): Prefs {
   return {
     theme: { ...DEFAULT_PREFS.theme, ...saved.theme },
     units: { ...DEFAULT_PREFS.units, ...saved.units },
+    currency: isCurrency(saved.currency) ? saved.currency : DEFAULT_PREFS.currency,
     weekStart: saved.weekStart === 'sunday' ? 'sunday' : 'monday',
     restSeconds:
       typeof saved.restSeconds === 'number' && saved.restSeconds > 0

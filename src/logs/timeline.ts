@@ -2,6 +2,7 @@
 // to SOURCES below.
 
 import type { LogId } from './registry'
+import { expensesTimeline } from './expenses/timeline'
 import { liftTimeline } from './lift/timeline'
 
 export interface TimelineItem {
@@ -17,6 +18,7 @@ export interface TimelineItem {
 
 const SOURCES: Partial<Record<LogId, () => Promise<TimelineItem[]>>> = {
   lift: liftTimeline,
+  expenses: expensesTimeline,
 }
 
 export async function loadTimeline(logs: LogId[]): Promise<TimelineItem[]> {

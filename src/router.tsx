@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router'
 
 import { AppShell } from './components/AppShell'
+import { LogLayout } from './components/LogLayout'
 import { LiftLayout } from './logs/lift/LiftLayout'
 import { WeightPage } from './logs/lift/WeightPage'
 import { LogsHubPage } from './pages/LogsHubPage'
@@ -14,6 +15,8 @@ import { TodayPage } from './pages/TodayPage'
 function page<T>(load: () => Promise<T>, pick: (module: T) => ComponentType) {
   return () => load().then((module) => ({ Component: pick(module) }))
 }
+
+const EXPENSE_TABS = [{ value: 'spending', label: 'Spending' }] as const
 
 const sessionPage = page(
   () => import('./logs/lift/SessionPage'),
@@ -83,6 +86,21 @@ export const router = createBrowserRouter(
                   lazy: page(
                     () => import('./logs/lift/photos/PhotoDetailPage'),
                     (m) => m.PhotoDetailPage,
+                  ),
+                },
+              ],
+            },
+            {
+              path: 'expenses',
+              handle: { title: 'Expenses', ownHeading: true },
+              element: <LogLayout log="expenses" tabs={EXPENSE_TABS} />,
+              children: [
+                { index: true, element: <Navigate to="spending" replace /> },
+                {
+                  path: 'spending',
+                  lazy: page(
+                    () => import('./logs/expenses/SpendingPage'),
+                    (m) => m.SpendingPage,
                   ),
                 },
               ],

@@ -20,10 +20,15 @@ const TODAY_CARDS: Partial<Record<LogId, ComponentType>> = {
 }
 
 async function loggedTimestamps(): Promise<string[]> {
-  const [weights, workouts] = await Promise.all([db.weights.toArray(), db.workouts.toArray()])
+  const [weights, workouts, expenses] = await Promise.all([
+    db.weights.toArray(),
+    db.workouts.toArray(),
+    db.expenses.toArray(),
+  ])
   return [
     ...weights.filter((w) => !w.deletedAt).map((w) => w.recordedAt),
     ...workouts.filter((w) => !w.deletedAt && w.endedAt).map((w) => w.startedAt),
+    ...expenses.filter((e) => !e.deletedAt && !e.recurringId).map((e) => e.spentAt),
   ]
 }
 

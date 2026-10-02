@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { getPrefs, setPrefs } from '../lib/prefs'
 import { BackupError, createBackup, parseBackup, restoreBackup } from './backup'
 import { db } from './db'
+import { addCategory, addExpense, listExpenses } from './expenses'
 import { addPhoto, deletePhoto, listPhotos } from './photos'
 import { addWeight, createExercise, saveProfile } from './repos'
 import { addExercise, finishWorkout, startWorkout, updateSet } from './workouts'
@@ -50,6 +51,8 @@ async function seed() {
     image: { data: bytes(5000), mime: 'image/jpeg', width: 1200, height: 1600 },
     thumb: { data: bytes(300), mime: 'image/jpeg', width: 300, height: 400 },
   })
+  await addExpense({ spentAt: '2026-09-30T13:00:00Z', amountMinor: 45050, categoryId: 'cat-food' })
+  await addCategory({ name: 'Pets', icon: 'pet', color: '#a2845e' })
 }
 
 describe('backup', () => {
@@ -71,6 +74,20 @@ describe('backup', () => {
     expect(new Uint8Array(photo!.data)[4999]).toBe(4999 % 256)
     expect(photo!.thumb.byteLength).toBe(300)
     expect(getPrefs().units.weight).toBe('lb')
+    expect((await listExpenses())[0]!.amountMinor).toBe(45050)
+  })
+
+  it('keeps the built-in categories when restoring a backup from before Expenses', async () => {
+    const v2 = JSON.stringify({
+      app: 'lifelogs',
+      version: 2,
+      exportedAt: '',
+      prefs: {},
+      tables: {},
+    })
+    await restoreBackup(parseBackup(v2))
+    expect(await db.expenseCategories.count()).toBeGreaterThan(10)
+    expect(await listExpenses()).toEqual([])
   })
 
   it('still restores version 1 backups (before photos)', async () => {

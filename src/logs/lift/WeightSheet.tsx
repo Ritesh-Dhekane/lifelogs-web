@@ -94,7 +94,7 @@ function WeightForm({
           <span className="sr-only">Weight in {unit}</span>
           <input
             inputMode="decimal"
-            autoFocus
+            data-autofocus
             value={value}
             onChange={(event) => {
               setValue(event.target.value)

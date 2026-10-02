@@ -59,10 +59,11 @@ export const LOGS: LogDefinition[] = [
   {
     id: 'expenses',
     name: 'Expenses',
-    tagline: 'Daily spending by category',
+    tagline: 'Spending, budgets, bills and subscriptions',
     icon: Wallet,
-    status: 'soon',
-    color: { text: 'text-expenses', bg: 'bg-expenses', soft: 'bg-expenses/12' },
+    status: 'ready',
+    path: '/expenses',
+    color: { text: 'text-expenses-ink', bg: 'bg-expenses', soft: 'bg-expenses/12' },
   },
   {
     id: 'distance',

@@ -1,6 +1,6 @@
 // Quick actions each log offers from the "+" sheet and the Today screen.
 
-import { Dumbbell, Scale, type LucideIcon } from 'lucide-react'
+import { Dumbbell, Receipt, Scale, type LucideIcon } from 'lucide-react'
 
 import type { LogId } from './registry'
 
@@ -24,6 +24,15 @@ export function quickActions(
           hint: state.workoutInProgress ? 'In progress' : 'New session',
           icon: Dumbbell,
           to: '/lift/workouts/session',
+        },
+      ]
+    case 'expenses':
+      return [
+        {
+          label: 'Add expense',
+          hint: 'Spent money',
+          icon: Receipt,
+          to: '/expenses/spending?add=1',
         },
       ]
     default:

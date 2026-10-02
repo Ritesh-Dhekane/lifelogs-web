@@ -4,6 +4,7 @@
 
 import Dexie, { type EntityTable } from 'dexie'
 
+import { BUILT_IN_CATEGORIES } from './expenseCategories'
 import { BUILT_IN_EXERCISES } from './exercises'
 
 export type WeightKind = 'before_gym' | 'after_gym' | 'general'
@@ -88,6 +89,54 @@ export interface Profile {
   updatedAt: string
 }
 
+// ---------- Expenses ----------
+
+export type PaidWith = 'cash' | 'card' | 'upi' | 'other'
+
+export interface Expense {
+  id: string
+  spentAt: string // ISO timestamp
+  amountMinor: number // whole paise/cents, always > 0
+  categoryId: string
+  paidWith: PaidWith | null
+  note: string | null
+  recurringId: string | null // set when a recurring bill logged it
+  linkedTo: string | null // e.g. a vehicle fuel entry that created it
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+}
+
+export interface ExpenseCategory {
+  id: string
+  name: string
+  icon: string // key into the category icon map
+  color: string // hex, used for dots and bars only (never for text)
+  budgetMinor: number | null // monthly budget
+  position: number
+  isCustom: boolean
+  archived: boolean
+}
+
+export type Cadence = 'weekly' | 'monthly' | 'yearly'
+
+export interface Recurring {
+  id: string
+  name: string
+  kind: 'subscription' | 'bill'
+  amountMinor: number
+  categoryId: string
+  cadence: Cadence
+  startOn: string // YYYY-MM-DD, the first due date; later ones keep its day of month
+  nextDue: string // YYYY-MM-DD
+  autoLog: boolean // add an expense on each due date
+  note: string | null
+  active: boolean
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+}
+
 export class LifeLogsDB extends Dexie {
   weights!: EntityTable<WeightEntry, 'id'>
   exercises!: EntityTable<Exercise, 'id'>
@@ -96,6 +145,9 @@ export class LifeLogsDB extends Dexie {
   sets!: EntityTable<WorkoutSet, 'id'>
   profile!: EntityTable<Profile, 'id'>
   photos!: EntityTable<ProgressPhoto, 'id'>
+  expenses!: EntityTable<Expense, 'id'>
+  expenseCategories!: EntityTable<ExpenseCategory, 'id'>
+  recurring!: EntityTable<Recurring, 'id'>
 
   constructor(name = 'lifelogs') {
     super(name)
@@ -109,11 +161,19 @@ export class LifeLogsDB extends Dexie {
       profile: 'id',
     })
     this.version(2).stores({ photos: 'id, takenAt' })
+    this.version(3)
+      .stores({
+        expenses: 'id, spentAt, categoryId, recurringId',
+        expenseCategories: 'id, position',
+        recurring: 'id, nextDue',
+      })
+      .upgrade((tx) => tx.table('expenseCategories').bulkAdd(BUILT_IN_CATEGORIES))
     this.on('populate', (tx) => {
       const now = new Date().toISOString()
       tx.table('exercises').bulkAdd(
         BUILT_IN_EXERCISES.map((exercise) => ({ ...exercise, isCustom: false, createdAt: now })),
       )
+      tx.table('expenseCategories').bulkAdd(BUILT_IN_CATEGORIES)
     })
   }
 }

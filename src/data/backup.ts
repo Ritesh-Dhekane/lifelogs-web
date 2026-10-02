@@ -5,8 +5,8 @@ import { getPrefs, normalizePrefs, setPrefs, type Prefs } from '../lib/prefs'
 import { db } from './db'
 
 export const BACKUP_APP = 'lifelogs'
-// v1: Lift tables. v2: + progress photos (image bytes as base64).
-export const BACKUP_VERSION = 2
+// v1: Lift tables. v2: + progress photos (image bytes as base64). v3: + expenses.
+export const BACKUP_VERSION = 3
 
 const TABLES = [
   'weights',
@@ -16,6 +16,9 @@ const TABLES = [
   'sets',
   'profile',
   'photos',
+  'expenses',
+  'expenseCategories',
+  'recurring',
 ] as const
 type TableName = (typeof TABLES)[number]
 
@@ -87,6 +90,8 @@ export async function restoreBackup(backup: Backup): Promise<void> {
     TABLES.map((name) => db.table(name)),
     async () => {
       for (const name of TABLES) {
+        // Older backups have no category table: keep the built-in categories then.
+        if (name === 'expenseCategories' && !backup.tables[name]) continue
         await db.table(name).clear()
         const rows =
           name === 'photos'
@@ -105,10 +110,15 @@ export function backupFileName(date = new Date()): string {
 }
 
 export async function countEntries(): Promise<number> {
-  const [weights, workouts] = await Promise.all([db.weights.toArray(), db.workouts.toArray()])
+  const [weights, workouts, expenses] = await Promise.all([
+    db.weights.toArray(),
+    db.workouts.toArray(),
+    db.expenses.toArray(),
+  ])
   return (
     weights.filter((w) => !w.deletedAt).length +
-    workouts.filter((w) => !w.deletedAt && w.endedAt).length
+    workouts.filter((w) => !w.deletedAt && w.endedAt).length +
+    expenses.filter((e) => !e.deletedAt).length
   )
 }
 

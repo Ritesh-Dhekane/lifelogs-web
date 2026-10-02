@@ -23,6 +23,8 @@
   --c-accent: #0066cc;
   --c-on-accent: #ffffff;
   --c-lift-ink: #c4320e; /* Lift orange, darkened for small text */
+  --c-expenses-ink: #9a5600;
+  --c-home-ink: #80603c;
   --c-success: #1e7b34;
   --c-success-soft: rgba(52, 199, 89, 0.14);
   --c-danger: #d70015;
@@ -47,6 +49,8 @@
   --c-accent: #4aa3ff;
   --c-on-accent: #000000;
   --c-lift-ink: #ff5a36;
+  --c-expenses-ink: #ff9f0a;
+  --c-home-ink: #c4a47c;
   --c-success: #30d158;
   --c-success-soft: rgba(48, 209, 88, 0.16);
   --c-danger: #ff453a;
@@ -79,6 +83,8 @@
   --color-accent: var(--c-accent);
   --color-on-accent: var(--c-on-accent);
   --color-lift-ink: var(--c-lift-ink);
+  --color-expenses-ink: var(--c-expenses-ink);
+  --color-home-ink: var(--c-home-ink);
   --color-success: var(--c-success);
   --color-success-soft: var(--c-success-soft);
   --color-danger: var(--c-danger);
@@ -99,6 +105,7 @@
   --color-screen: #af52de;
   --color-thoughts: #ff2d55;
   --color-tasks: #5856d6;
+  --color-home: #a2845e;
 
   --text-display: 40px;
   --text-display--line-height: 48px;
