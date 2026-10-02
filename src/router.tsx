@@ -25,6 +25,7 @@ const EXPENSE_TABS = [
 const HOME_TABS = [
   { value: 'things', label: 'Things' },
   { value: 'vehicles', label: 'Vehicles' },
+  { value: 'care', label: 'Care' },
 ] as const
 
 const sessionPage = page(
@@ -139,6 +140,13 @@ export const router = createBrowserRouter(
                   lazy: page(
                     () => import('./logs/home/ThingsPage'),
                     (m) => m.ThingsPage,
+                  ),
+                },
+                {
+                  path: 'care',
+                  lazy: page(
+                    () => import('./logs/home/CarePage'),
+                    (m) => m.CarePage,
                   ),
                 },
                 {

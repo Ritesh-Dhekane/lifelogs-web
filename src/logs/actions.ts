@@ -4,6 +4,7 @@ import {
   Dumbbell,
   FileText,
   Fuel,
+  Leaf,
   Package,
   Receipt,
   Repeat,
@@ -52,6 +53,7 @@ export function quickActions(
       ]
     case 'home':
       return [
+        { label: 'Care done', hint: 'Plants, pets, chores', icon: Leaf, to: '/home/care' },
         { label: 'Add fuel', hint: 'Fill-up, mileage', icon: Fuel, to: '/home/vehicles?add=fuel' },
         {
           label: 'Add item',
