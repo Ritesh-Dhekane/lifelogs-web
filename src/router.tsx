@@ -22,6 +22,8 @@ const EXPENSE_TABS = [
   { value: 'recurring', label: 'Recurring' },
 ] as const
 
+const HOME_TABS = [{ value: 'things', label: 'Things' }] as const
+
 const sessionPage = page(
   () => import('./logs/lift/SessionPage'),
   (m) => m.SessionPage,
@@ -119,6 +121,21 @@ export const router = createBrowserRouter(
                   lazy: page(
                     () => import('./logs/expenses/BudgetsPage'),
                     (m) => m.BudgetsPage,
+                  ),
+                },
+              ],
+            },
+            {
+              path: 'home',
+              handle: { title: 'Home', ownHeading: true },
+              element: <LogLayout log="home" tabs={HOME_TABS} />,
+              children: [
+                { index: true, element: <Navigate to="things" replace /> },
+                {
+                  path: 'things',
+                  lazy: page(
+                    () => import('./logs/home/ThingsPage'),
+                    (m) => m.ThingsPage,
                   ),
                 },
               ],

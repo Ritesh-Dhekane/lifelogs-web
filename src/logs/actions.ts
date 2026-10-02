@@ -1,6 +1,6 @@
 // Quick actions each log offers from the "+" sheet and the Today screen.
 
-import { Dumbbell, Receipt, Repeat, Scale, type LucideIcon } from 'lucide-react'
+import { Dumbbell, FileText, Package, Receipt, Repeat, Scale, type LucideIcon } from 'lucide-react'
 
 import type { LogId } from './registry'
 
@@ -39,6 +39,21 @@ export function quickActions(
           hint: 'Bill or subscription',
           icon: Repeat,
           to: '/expenses/recurring?add=1',
+        },
+      ]
+    case 'home':
+      return [
+        {
+          label: 'Add item',
+          hint: 'Warranty, receipt',
+          icon: Package,
+          to: '/home/things?add=item',
+        },
+        {
+          label: 'Add document',
+          hint: 'Expiry reminder',
+          icon: FileText,
+          to: '/home/things?add=document',
         },
       ]
     default:

@@ -137,6 +137,96 @@ export interface Recurring {
   deletedAt: string | null
 }
 
+// ---------- Home ----------
+// Calendar dates (bought on, expires on, start on) are local "YYYY-MM-DD" strings; moments are ISO.
+
+export type ThingKind = 'item' | 'document'
+
+export interface Thing {
+  id: string
+  kind: ThingKind
+  name: string
+  category: string // key into the thing category labels (electronics, insurance…)
+  place: string | null // where it is (items) or who issued it (documents)
+  boughtOn: string | null
+  priceMinor: number | null
+  expiresOn: string | null // warranty end (items) or expiry (documents)
+  remindDays: number // show it as due this many days before expiresOn
+  note: string | null
+  photoId: string | null // an Attachment (receipt or the item)
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+}
+
+// Image attached to something (a thing's receipt or photo). Same shape as progress photos.
+export interface Attachment {
+  id: string
+  ownerId: string
+  mime: string
+  width: number
+  height: number
+  data: ArrayBuffer
+  thumb: ArrayBuffer
+  createdAt: string
+}
+
+export type VehicleType = 'car' | 'bike' | 'scooter' | 'other'
+
+export interface Vehicle {
+  id: string
+  name: string
+  type: VehicleType
+  serviceEveryKm: number | null
+  serviceEveryMonths: number | null
+  archived: boolean
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+}
+
+export type VehicleLogKind = 'fuel' | 'service' | 'odometer'
+
+export interface VehicleLog {
+  id: string
+  vehicleId: string
+  kind: VehicleLogKind
+  at: string // ISO
+  odometerKm: number | null
+  litres: number | null // fuel only
+  fullTank: boolean // fuel only; mileage is measured between full tanks
+  costMinor: number | null
+  note: string | null
+  expenseId: string | null // the matching entry in Expenses, if one was added
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+}
+
+export type CareGroup = 'plant' | 'pet' | 'home'
+
+export interface CareTask {
+  id: string
+  name: string
+  group: CareGroup
+  everyDays: number
+  startOn: string // first due date when it has never been done
+  lastDoneAt: string | null // ISO
+  note: string | null
+  archived: boolean
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+}
+
+export interface CareLog {
+  id: string
+  taskId: string
+  doneAt: string // ISO
+  note: string | null
+  createdAt: string
+}
+
 export class LifeLogsDB extends Dexie {
   weights!: EntityTable<WeightEntry, 'id'>
   exercises!: EntityTable<Exercise, 'id'>
@@ -148,6 +238,12 @@ export class LifeLogsDB extends Dexie {
   expenses!: EntityTable<Expense, 'id'>
   expenseCategories!: EntityTable<ExpenseCategory, 'id'>
   recurring!: EntityTable<Recurring, 'id'>
+  things!: EntityTable<Thing, 'id'>
+  attachments!: EntityTable<Attachment, 'id'>
+  vehicles!: EntityTable<Vehicle, 'id'>
+  vehicleLogs!: EntityTable<VehicleLog, 'id'>
+  careTasks!: EntityTable<CareTask, 'id'>
+  careLogs!: EntityTable<CareLog, 'id'>
 
   constructor(name = 'lifelogs') {
     super(name)
@@ -168,6 +264,14 @@ export class LifeLogsDB extends Dexie {
         recurring: 'id, nextDue',
       })
       .upgrade((tx) => tx.table('expenseCategories').bulkAdd(BUILT_IN_CATEGORIES))
+    this.version(4).stores({
+      things: 'id, kind, expiresOn',
+      attachments: 'id, ownerId',
+      vehicles: 'id',
+      vehicleLogs: 'id, vehicleId, at',
+      careTasks: 'id, group',
+      careLogs: 'id, taskId, doneAt',
+    })
     this.on('populate', (tx) => {
       const now = new Date().toISOString()
       tx.table('exercises').bulkAdd(

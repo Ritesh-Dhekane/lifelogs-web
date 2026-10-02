@@ -5,8 +5,8 @@ import { getPrefs, normalizePrefs, setPrefs, type Prefs } from '../lib/prefs'
 import { db } from './db'
 
 export const BACKUP_APP = 'lifelogs'
-// v1: Lift tables. v2: + progress photos (image bytes as base64). v3: + expenses.
-export const BACKUP_VERSION = 3
+// v1: Lift tables. v2: + progress photos (image bytes as base64). v3: + expenses. v4: + home.
+export const BACKUP_VERSION = 4
 
 const TABLES = [
   'weights',
@@ -19,6 +19,12 @@ const TABLES = [
   'expenses',
   'expenseCategories',
   'recurring',
+  'things',
+  'attachments',
+  'vehicles',
+  'vehicleLogs',
+  'careTasks',
+  'careLogs',
 ] as const
 type TableName = (typeof TABLES)[number]
 
@@ -40,6 +46,7 @@ export async function createBackup(): Promise<Backup> {
     async () => {
       for (const name of TABLES) tables[name] = await db.table(name).toArray()
       tables.photos = (tables.photos as Record<string, unknown>[]).map(encodePhoto)
+      tables.attachments = (tables.attachments as Record<string, unknown>[]).map(encodePhoto)
     },
   )
   return {
@@ -94,8 +101,8 @@ export async function restoreBackup(backup: Backup): Promise<void> {
         if (name === 'expenseCategories' && !backup.tables[name]) continue
         await db.table(name).clear()
         const rows =
-          name === 'photos'
-            ? (backup.tables.photos ?? []).map((row) => decodePhoto(row as Record<string, unknown>))
+          name === 'photos' || name === 'attachments'
+            ? (backup.tables[name] ?? []).map((row) => decodePhoto(row as Record<string, unknown>))
             : (backup.tables[name] ?? [])
         if (rows.length) await db.table(name).bulkPut(rows)
       }

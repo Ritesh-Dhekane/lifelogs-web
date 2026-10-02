@@ -3,19 +3,12 @@
 // Items with auto-log on add an expense on each due date — including ones missed while the app
 // wasn't opened — exactly once.
 
+import { fromDay, toDay } from '../lib/days'
 import { db, newId, nowIso, type Cadence, type Recurring } from './db'
 
-// ---------- Dates (local, "YYYY-MM-DD") ----------
+// ---------- Dates ----------
 
-export function toDay(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
-}
-
-export function fromDay(day: string): Date {
-  const [y, m, d] = day.split('-').map(Number)
-  return new Date(y!, m! - 1, d!)
-}
+export { fromDay, toDay } from '../lib/days'
 
 // The n-th due date (n = 0 is the start date).
 export function occurrence(startOn: string, cadence: Cadence, n: number): string {

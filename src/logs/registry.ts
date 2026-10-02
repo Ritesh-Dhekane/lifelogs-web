@@ -8,6 +8,7 @@ import {
   Droplet,
   Dumbbell,
   Footprints,
+  House,
   Smartphone,
   UtensilsCrossed,
   Wallet,
@@ -17,7 +18,7 @@ import {
 import { getPrefs, type Prefs } from '../lib/prefs'
 
 export type LogId =
-  'lift' | 'water' | 'meals' | 'expenses' | 'distance' | 'screen' | 'thoughts' | 'tasks'
+  'lift' | 'expenses' | 'home' | 'water' | 'meals' | 'distance' | 'screen' | 'thoughts' | 'tasks'
 
 export interface LogDefinition {
   id: LogId
@@ -41,6 +42,24 @@ export const LOGS: LogDefinition[] = [
     color: { text: 'text-lift', bg: 'bg-lift', soft: 'bg-lift/12' },
   },
   {
+    id: 'expenses',
+    name: 'Expenses',
+    tagline: 'Spending, budgets, bills and subscriptions',
+    icon: Wallet,
+    status: 'ready',
+    path: '/expenses',
+    color: { text: 'text-expenses-ink', bg: 'bg-expenses', soft: 'bg-expenses/12' },
+  },
+  {
+    id: 'home',
+    name: 'Home',
+    tagline: 'Things, papers, vehicles and care — and what’s due',
+    icon: House,
+    status: 'ready',
+    path: '/home',
+    color: { text: 'text-home-ink', bg: 'bg-home', soft: 'bg-home/12' },
+  },
+  {
     id: 'water',
     name: 'Water',
     tagline: 'Daily hydration against a goal',
@@ -55,15 +74,6 @@ export const LOGS: LogDefinition[] = [
     icon: UtensilsCrossed,
     status: 'soon',
     color: { text: 'text-meals', bg: 'bg-meals', soft: 'bg-meals/12' },
-  },
-  {
-    id: 'expenses',
-    name: 'Expenses',
-    tagline: 'Spending, budgets, bills and subscriptions',
-    icon: Wallet,
-    status: 'ready',
-    path: '/expenses',
-    color: { text: 'text-expenses-ink', bg: 'bg-expenses', soft: 'bg-expenses/12' },
   },
   {
     id: 'distance',
