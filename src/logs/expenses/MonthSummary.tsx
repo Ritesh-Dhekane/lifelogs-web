@@ -5,7 +5,16 @@ import type { Expense, ExpenseCategory } from '../../data/db'
 import { Card } from '../../components/ui'
 import { formatMoney } from '../../lib/money'
 import { usePrefs } from '../../lib/prefs'
-import { addMonths, byCategory, inMonth, inRange, monthKey, monthStart, total } from './stats'
+import {
+  addMonths,
+  byCategory,
+  inMonth,
+  inRange,
+  monthKey,
+  monthlyTotals,
+  monthStart,
+  total,
+} from './stats'
 
 export function MonthSummary({
   expenses,
@@ -95,6 +104,36 @@ export function MonthSummary({
           </ul>
         </>
       )}
+
+      <MonthBars expenses={expenses} month={month} />
     </Card>
+  )
+}
+
+// The last six months as small bars, the selected one highlighted.
+function MonthBars({ expenses, month }: { expenses: Expense[]; month: string }) {
+  const { currency } = usePrefs()
+  const months = monthlyTotals(expenses, month, 6)
+  const peak = Math.max(...months.map((m) => m.totalMinor), 1)
+  if (months.filter((m) => m.totalMinor > 0).length < 2) return null
+  return (
+    <figure className="flex flex-col gap-2 border-t border-line pt-3">
+      <figcaption className="text-label text-ink-2">Last 6 months</figcaption>
+      <ol className="flex h-24 items-end gap-2">
+        {months.map((m) => (
+          <li key={m.month} className="flex h-full flex-1 flex-col items-center justify-end gap-1">
+            <span
+              className={`w-full max-w-10 rounded-md ${m.month === month ? 'bg-expenses' : 'bg-card-2'}`}
+              style={{ height: `${Math.max(4, (m.totalMinor / peak) * 100)}%` }}
+              title={formatMoney(m.totalMinor, currency)}
+            />
+            <span className="text-meta text-ink-3 normal-case tracking-normal">
+              {monthStart(m.month).toLocaleDateString('en-US', { month: 'short' })}
+            </span>
+            <span className="sr-only">{formatMoney(m.totalMinor, currency)}</span>
+          </li>
+        ))}
+      </ol>
+    </figure>
   )
 }

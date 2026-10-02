@@ -16,7 +16,10 @@ function page<T>(load: () => Promise<T>, pick: (module: T) => ComponentType) {
   return () => load().then((module) => ({ Component: pick(module) }))
 }
 
-const EXPENSE_TABS = [{ value: 'spending', label: 'Spending' }] as const
+const EXPENSE_TABS = [
+  { value: 'spending', label: 'Spending' },
+  { value: 'budgets', label: 'Budgets' },
+] as const
 
 const sessionPage = page(
   () => import('./logs/lift/SessionPage'),
@@ -101,6 +104,13 @@ export const router = createBrowserRouter(
                   lazy: page(
                     () => import('./logs/expenses/SpendingPage'),
                     (m) => m.SpendingPage,
+                  ),
+                },
+                {
+                  path: 'budgets',
+                  lazy: page(
+                    () => import('./logs/expenses/BudgetsPage'),
+                    (m) => m.BudgetsPage,
                   ),
                 },
               ],

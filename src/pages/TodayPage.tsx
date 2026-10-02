@@ -11,12 +11,14 @@ import { describeBackup, useBackupStatus } from '../lib/backupStatus'
 import { greeting } from '../lib/dates'
 import { usePrefs } from '../lib/prefs'
 import { loggingStreak } from '../lib/streak'
+import { ExpensesTodayCard } from '../logs/expenses/ExpensesTodayCard'
 import { LiftTodayCard } from '../logs/lift/LiftTodayCard'
 import { enabledLogs, type LogId } from '../logs/registry'
 
 // Each log's Today card. A new log adds its card here.
 const TODAY_CARDS: Partial<Record<LogId, ComponentType>> = {
   lift: LiftTodayCard,
+  expenses: ExpensesTodayCard,
 }
 
 async function loggedTimestamps(): Promise<string[]> {
@@ -84,7 +86,7 @@ export function TodayPage() {
             {logs.length === 0 ? 'Switch on a log to get started' : 'Customize your day'}
           </span>
           <span className="text-label text-ink-2">
-            Water, meals, expenses and more are on the way
+            Switch logs on or off, and see what's coming next
           </span>
         </span>
         <span className="text-label font-medium text-accent">Logs</span>

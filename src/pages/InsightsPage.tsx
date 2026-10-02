@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState, type ComponentType } from 'react'
 
 import { usePrefs } from '../lib/prefs'
+import { ExpensesInsights } from '../logs/expenses/ExpensesInsights'
 import { LiftInsights } from '../logs/lift/LiftInsights'
 import { weekStart } from '../logs/lift/liftStats'
 import { enabledLogs, type LogId } from '../logs/registry'
@@ -11,6 +12,7 @@ import { enabledLogs, type LogId } from '../logs/registry'
 // Each log's weekly section. A new log adds its component here.
 const SECTIONS: Partial<Record<LogId, ComponentType<{ from: Date; to: Date; now: Date }>>> = {
   lift: LiftInsights,
+  expenses: ExpensesInsights,
 }
 
 export function InsightsPage() {
