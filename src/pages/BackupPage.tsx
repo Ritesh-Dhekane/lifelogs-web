@@ -2,8 +2,18 @@
 // desktop. Google Drive comes next.
 
 import { useLiveQuery } from 'dexie-react-hooks'
-import { CloudUpload, Download, FileUp, FolderSync, HardDrive, ShieldCheck } from 'lucide-react'
+import {
+  ChevronRight,
+  CloudUpload,
+  Download,
+  FileSpreadsheet,
+  FileUp,
+  FolderSync,
+  HardDrive,
+  ShieldCheck,
+} from 'lucide-react'
 import { useRef, useState, type ChangeEvent } from 'react'
+import { Link } from 'react-router'
 
 import { Card, SectionLabel } from '../components/ui'
 import {
@@ -155,6 +165,20 @@ export function BackupPage() {
           {message.text}
         </p>
       )}
+
+      <SectionLabel>Spreadsheet</SectionLabel>
+      <Link to="/export" className="block">
+        <Card as="div" className="flex items-center gap-3">
+          <FileSpreadsheet className="size-5 shrink-0 text-accent" />
+          <span className="flex-1">
+            <span className="block text-body font-medium">Export to Excel or CSV</span>
+            <span className="text-label text-ink-2">
+              To read or analyse your logs in a spreadsheet (not for restoring)
+            </span>
+          </span>
+          <ChevronRight className="size-4 text-ink-3" />
+        </Card>
+      </Link>
 
       {folderBackupSupported && <FolderSection />}
 

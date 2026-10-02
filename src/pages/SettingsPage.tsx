@@ -232,6 +232,7 @@ function DataSection() {
           }
         />
         <LinkRow to="/backup" title="Backup & restore" text={describeBackup(backup)} />
+        <LinkRow to="/export" title="Export to Excel or CSV" text="Your logs as a spreadsheet" />
         <div className="flex items-start gap-3 py-3">
           <Lock className="mt-0.5 size-4 shrink-0 text-ink-2" />
           <p className="text-label text-ink-2">

@@ -213,6 +213,14 @@ export const router = createBrowserRouter(
                 (m) => m.BackupPage,
               ),
             },
+            {
+              path: 'export',
+              handle: { title: 'Export data' },
+              lazy: page(
+                () => import('./pages/ExportPage'),
+                (m) => m.ExportPage,
+              ),
+            },
             { path: 'about', handle: { title: 'About', ownHeading: true }, element: <AboutPage /> },
             { path: '*', handle: { title: 'Not found' }, element: <NotFoundPage /> },
           ],
