@@ -1,6 +1,15 @@
 // Quick actions each log offers from the "+" sheet and the Today screen.
 
-import { Dumbbell, FileText, Package, Receipt, Repeat, Scale, type LucideIcon } from 'lucide-react'
+import {
+  Dumbbell,
+  FileText,
+  Fuel,
+  Package,
+  Receipt,
+  Repeat,
+  Scale,
+  type LucideIcon,
+} from 'lucide-react'
 
 import type { LogId } from './registry'
 
@@ -43,6 +52,7 @@ export function quickActions(
       ]
     case 'home':
       return [
+        { label: 'Add fuel', hint: 'Fill-up, mileage', icon: Fuel, to: '/home/vehicles?add=fuel' },
         {
           label: 'Add item',
           hint: 'Warranty, receipt',

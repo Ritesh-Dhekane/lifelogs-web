@@ -22,7 +22,10 @@ const EXPENSE_TABS = [
   { value: 'recurring', label: 'Recurring' },
 ] as const
 
-const HOME_TABS = [{ value: 'things', label: 'Things' }] as const
+const HOME_TABS = [
+  { value: 'things', label: 'Things' },
+  { value: 'vehicles', label: 'Vehicles' },
+] as const
 
 const sessionPage = page(
   () => import('./logs/lift/SessionPage'),
@@ -136,6 +139,20 @@ export const router = createBrowserRouter(
                   lazy: page(
                     () => import('./logs/home/ThingsPage'),
                     (m) => m.ThingsPage,
+                  ),
+                },
+                {
+                  path: 'vehicles',
+                  lazy: page(
+                    () => import('./logs/home/VehiclesPage'),
+                    (m) => m.VehiclesPage,
+                  ),
+                },
+                {
+                  path: 'vehicles/:id',
+                  lazy: page(
+                    () => import('./logs/home/VehicleDetailPage'),
+                    (m) => m.VehicleDetailPage,
                   ),
                 },
               ],
