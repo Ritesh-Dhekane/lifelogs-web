@@ -19,6 +19,7 @@ function page<T>(load: () => Promise<T>, pick: (module: T) => ComponentType) {
 const EXPENSE_TABS = [
   { value: 'spending', label: 'Spending' },
   { value: 'budgets', label: 'Budgets' },
+  { value: 'recurring', label: 'Recurring' },
 ] as const
 
 const sessionPage = page(
@@ -104,6 +105,13 @@ export const router = createBrowserRouter(
                   lazy: page(
                     () => import('./logs/expenses/SpendingPage'),
                     (m) => m.SpendingPage,
+                  ),
+                },
+                {
+                  path: 'recurring',
+                  lazy: page(
+                    () => import('./logs/expenses/RecurringPage'),
+                    (m) => m.RecurringPage,
                   ),
                 },
                 {

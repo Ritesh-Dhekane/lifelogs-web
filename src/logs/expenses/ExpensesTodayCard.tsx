@@ -7,20 +7,23 @@ import { Link } from 'react-router'
 
 import { Card, LogBadge } from '../../components/ui'
 import { listCategories, listExpenses } from '../../data/expenses'
+import { listRecurring, toDay } from '../../data/recurring'
 import { sameDay } from '../../lib/dates'
 import { formatMoney } from '../../lib/money'
 import { usePrefs } from '../../lib/prefs'
 import { getLog } from '../registry'
+import { dueLabel } from './recurringLabels'
 import { budgetStatus, inMonth, monthElapsed, monthKey, total } from './stats'
 
 export function ExpensesTodayCard() {
   const expenses = useLiveQuery(listExpenses)
   const categories = useLiveQuery(() => listCategories())
+  const recurring = useLiveQuery(listRecurring)
   const { currency } = usePrefs()
   const [now] = useState(() => new Date())
   const log = getLog('expenses')
 
-  if (!expenses || !categories)
+  if (!expenses || !categories || !recurring)
     return (
       <Card className="h-40 animate-pulse" aria-label="Expenses">
         {null}
@@ -36,6 +39,8 @@ export function ExpensesTodayCard() {
     .filter((b) => b.over || b.share > elapsed + 0.15)
     .sort((a, b) => b.share - a.share)
     .slice(0, 2)
+  const soon = toDay(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 3))
+  const bills = recurring.filter((r) => r.active && r.nextDue <= soon).slice(0, 3)
 
   return (
     <Card aria-label="Expenses" className="flex flex-col gap-4">
@@ -64,6 +69,25 @@ export function ExpensesTodayCard() {
           <Plus className="size-4" /> Add
         </Link>
       </div>
+
+      {bills.length > 0 && (
+        <ul className="flex flex-col divide-y divide-line rounded-xl bg-card-2 px-3">
+          {bills.map((r) => (
+            <li key={r.id}>
+              <Link
+                to="/expenses/recurring"
+                className="flex items-center justify-between gap-3 py-2 text-label"
+              >
+                <span className="truncate font-medium">{r.name}</span>
+                <span className="shrink-0 text-ink-2 tnum">
+                  {formatMoney(r.amountMinor, currency)} · {dueLabel(r.nextDue, now).toLowerCase()}
+                  {r.autoLog ? ' (auto)' : ''}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {alerts.length > 0 && (
         <ul className="flex flex-col gap-1.5">

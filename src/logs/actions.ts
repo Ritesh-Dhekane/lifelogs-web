@@ -1,6 +1,6 @@
 // Quick actions each log offers from the "+" sheet and the Today screen.
 
-import { Dumbbell, Receipt, Scale, type LucideIcon } from 'lucide-react'
+import { Dumbbell, Receipt, Repeat, Scale, type LucideIcon } from 'lucide-react'
 
 import type { LogId } from './registry'
 
@@ -33,6 +33,12 @@ export function quickActions(
           hint: 'Spent money',
           icon: Receipt,
           to: '/expenses/spending?add=1',
+        },
+        {
+          label: 'Add a bill',
+          hint: 'Bill or subscription',
+          icon: Repeat,
+          to: '/expenses/recurring?add=1',
         },
       ]
     default:
